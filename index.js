@@ -1,36 +1,33 @@
 const mineflayer = require('mineflayer');
 const express = require('express');
 
-// Express server for Render health checks
 const app = express();
 const PORT = process.env.PORT || 10000;
 
 app.get('/', (req, res) => {
-  res.send('Aternos AFK Bot is running!');
+  res.send('AFK Bot active');
 });
 
 app.listen(PORT, () => {
   console.log(`Web server listening on port ${PORT}`);
 });
 
-// Bot Configuration
 const botOptions = {
-  host: 'KnoxSMPJava.aternos.me', // <-- Your Aternos DynIP (without port)
-  port: 30502,                         // <-- Your 5-digit Aternos Port
+  host: 'KnoxSMPJava.aternos.me', // Your Aternos DynIP
+  port: 30502,                         // Your 5-digit Aternos Port
   username: 'the',
-  auth: 'offline',                     // Required for Cracked servers
-  version: '1.20.4',                   // FORCES 1.20.4 packet protocol (ViaVersion translates this to 26.3)
-  checkTimeoutInterval: 90 * 1000
+  auth: 'offline',
+  checkTimeoutInterval: 120000         // Extended timeout for handshaking
 };
 
 function createBot() {
-  console.log('Connecting bot to Aternos server...');
+  console.log('Attempting connection to 26.3 server...');
   
   try {
     const bot = mineflayer.createBot(botOptions);
 
     bot.on('spawn', () => {
-      console.log('SUCCESS: Bot joined the Aternos server!');
+      console.log('SUCCESS: Bot joined the 26.3 server!');
       
       setInterval(() => {
         if (bot.entity) {
@@ -40,16 +37,16 @@ function createBot() {
     });
 
     bot.on('end', (reason) => {
-      console.log(`Disconnected (${reason}). Retrying in 20 seconds...`);
+      console.log(`Disconnected (${reason}). Reconnecting...`);
       setTimeout(createBot, 20000);
     });
 
     bot.on('error', (err) => {
-      console.log('Bot connection error:', err.message);
+      console.log('Protocol Error:', err.message);
     });
 
   } catch (err) {
-    console.log('Creation failed:', err.message);
+    console.log('Fatal error:', err.message);
     setTimeout(createBot, 20000);
   }
 }
