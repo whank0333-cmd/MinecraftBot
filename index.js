@@ -1,24 +1,25 @@
 const mineflayer = require('mineflayer');
 const express = require('express');
 
+// Express server for Render health checks
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 
 app.get('/', (req, res) => {
-  res.send('Aternos AFK Bot is running 24/7!');
+  res.send('Aternos AFK Bot is active!');
 });
 
 app.listen(PORT, () => {
   console.log(`Web server listening on port ${PORT}`);
 });
 
-// --- Mineflayer Bot Configuration ---
+// Bot Configuration
 const botOptions = {
-  host: 'KnoxSMPJava.aternos.me', // <-- Your Aternos DynIP (without port)
-  port: 30502,                    // <-- Your 5-digit Aternos Port
-  username: 'null',
-  auth: 'offline',                // Required for Cracked mode
-  version: '1.21'               // <-- ADD THIS LINE! (Replace '1.20.1' with your exact Aternos server version e.g., '1.20.4', '1.21.1', etc.)
+  host: 'KnoxSMPJava.aternos.me', // <-- Replace with DynIP
+  port: 30502,                         // <-- Replace with 5-digit Port
+  username: 'MrMiguel',
+  auth: 'offline',
+  checkTimeoutInterval: 90 * 1000      // Gives extra time for protocol handshakes
 };
 
 function createBot() {
@@ -28,8 +29,9 @@ function createBot() {
     const bot = mineflayer.createBot(botOptions);
 
     bot.on('spawn', () => {
-      console.log('SUCCESS: Bot has joined the server!');
+      console.log('SUCCESS: Bot has joined the Aternos server!');
       
+      // Anti-AFK routine: rotate slightly every 30 seconds
       setInterval(() => {
         if (bot.entity) {
           bot.look(bot.entity.yaw + 0.5, bot.entity.pitch, true);
@@ -38,16 +40,16 @@ function createBot() {
     });
 
     bot.on('end', (reason) => {
-      console.log(`Disconnected (${reason}). Reconnecting in 20 seconds...`);
+      console.log(`Disconnected: ${reason}. Retrying in 20 seconds...`);
       setTimeout(createBot, 20000);
     });
 
     bot.on('error', (err) => {
-      console.log('Bot Error:', err.message);
+      console.log('Bot connection error:', err.message);
     });
 
   } catch (err) {
-    console.log('Failed to create bot instance:', err.message);
+    console.log('Failed to create bot:', err.message);
     setTimeout(createBot, 20000);
   }
 }
