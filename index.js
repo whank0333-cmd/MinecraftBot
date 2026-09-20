@@ -18,7 +18,7 @@ const botOptions = {
   port: 30502,                    // <-- Your 5-digit Aternos Port
   username: 'null',
   auth: 'offline',                // Required for Cracked mode
-  version: '26.3'               // <-- ADD THIS LINE! (Replace '1.20.1' with your exact Aternos server version e.g., '1.20.4', '1.21.1', etc.)
+  version: '1.20.1'               // <-- ADD THIS LINE! (Replace '1.20.1' with your exact Aternos server version e.g., '1.20.4', '1.21.1', etc.)
 };
 
 function createBot() {
