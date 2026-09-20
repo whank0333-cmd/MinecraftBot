@@ -6,7 +6,7 @@ const app = express();
 const PORT = process.env.PORT || 10000;
 
 app.get('/', (req, res) => {
-  res.send('Aternos AFK Bot is active!');
+  res.send('Aternos AFK Bot is running!');
 });
 
 app.listen(PORT, () => {
@@ -15,11 +15,12 @@ app.listen(PORT, () => {
 
 // Bot Configuration
 const botOptions = {
-  host: 'KnoxSMPJava.aternos.me', // <-- Replace with DynIP
-  port: 30502,                         // <-- Replace with 5-digit Port
-  username: 'MrMiguel',
-  auth: 'offline',
-  checkTimeoutInterval: 90 * 1000      // Gives extra time for protocol handshakes
+  host: 'KnoxSMPJava.aternos.me', // <-- Your Aternos DynIP (without port)
+  port: 30502,                         // <-- Your 5-digit Aternos Port
+  username: 'the',
+  auth: 'offline',                     // Required for Cracked servers
+  version: '1.20.4',                   // FORCES 1.20.4 packet protocol (ViaVersion translates this to 26.3)
+  checkTimeoutInterval: 90 * 1000
 };
 
 function createBot() {
@@ -29,9 +30,8 @@ function createBot() {
     const bot = mineflayer.createBot(botOptions);
 
     bot.on('spawn', () => {
-      console.log('SUCCESS: Bot has joined the Aternos server!');
+      console.log('SUCCESS: Bot joined the Aternos server!');
       
-      // Anti-AFK routine: rotate slightly every 30 seconds
       setInterval(() => {
         if (bot.entity) {
           bot.look(bot.entity.yaw + 0.5, bot.entity.pitch, true);
@@ -40,7 +40,7 @@ function createBot() {
     });
 
     bot.on('end', (reason) => {
-      console.log(`Disconnected: ${reason}. Retrying in 20 seconds...`);
+      console.log(`Disconnected (${reason}). Retrying in 20 seconds...`);
       setTimeout(createBot, 20000);
     });
 
@@ -49,7 +49,7 @@ function createBot() {
     });
 
   } catch (err) {
-    console.log('Failed to create bot:', err.message);
+    console.log('Creation failed:', err.message);
     setTimeout(createBot, 20000);
   }
 }
