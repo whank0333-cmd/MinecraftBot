@@ -1,13 +1,13 @@
 {
-  "name": "MinecraftBot",
+  "name": "minecraftbot",
   "version": "1.0.0",
-  "description": "Mineflayer AFK Bot for Aternos",
+  "description": "Mineflayer Bot for Aternos",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
-    "mineflayer": "^4.20.1",
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "mineflayer": "latest"
   }
 }
